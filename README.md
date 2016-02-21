@@ -26,7 +26,7 @@ dependencies {
 Code Example
 ===============
 
-```
+```java
 public class FirebaseTest extends OpMode {
  
     RobotValues robotValues = null;
