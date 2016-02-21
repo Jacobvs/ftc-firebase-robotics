@@ -54,13 +54,6 @@ public class FirebaseTest extends OpMode {
                                 telemetry.addData("value1", "The value is: " + val);
                             }
                         }))
-                .add(new ValueListener("sensor.color.b",
-                        new ListenerAction() {
-                            @Override
-                            public void onValueChanged(Object val) {
-                                telemetry.addData("value2", "The value is: " + val);
-                            }
-                        }));
  
  		// Start 
         this.robotValues.start();
