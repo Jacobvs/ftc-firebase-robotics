@@ -23,24 +23,53 @@ dependencies {
 }
 ```
 
-Maven usage
-==============
+Code Example
+===============
 
-Add a repository to your root pom.xml:
 ```
-<repositories>
-    <repository>
-        <id>jitpack.io</id>
-        <url>https://jitpack.io</url>
-    </repository>
-</repositories>
-```
-
-And add a dependency:
-```
-<dependency>
-    <groupId>com.github.Jacobvs</groupId>
-    <artifactId>ftc-firebase-robotics</artifactId>
-    <version>1.0</version>
-</dependency>
+public class FirebaseTest extends OpMode {
+ 
+    RobotValues robotValues = null;
+ 
+    public FirebaseTest() {
+    }
+ 
+    @Override
+    public void init() {
+ 
+        final Firebase fb = new Firebase("https://9523-2015.firebaseio.com/");
+  
+        this.robotValues = new RobotValues(fb, 1.5);
+        this.robotValues
+                .add(new ValueWriter("sensor.color.a",
+                        new ValueSource() {
+                            @Override
+                            public Object getValue() {
+                                return System.currentTimeMillis();
+                            }}))
+                .add(new ValueListener("sensor.color.a",
+                        new ListenerAction() {
+                            @Override
+                            public void onValueChanged(Object val) {
+                                telemetry.addData("value1", "The value is: " + val);
+                            }
+                        }))
+                .add(new ValueListener("sensor.color.b",
+                        new ListenerAction() {
+                            @Override
+                            public void onValueChanged(Object val) {
+                                telemetry.addData("value2", "The value is: " + val);
+                            }
+                        }));
+ 
+ 		// Start 
+        this.robotValues.start();
+    }
+ 
+    @Override
+    public void stop() {
+    	// Stop 
+        this.robotValues.stop();
+    }
+ }
 ```
