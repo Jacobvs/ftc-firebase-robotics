@@ -37,7 +37,7 @@ public class FirebaseTest extends OpMode {
     @Override
     public void init() {
  
-        final Firebase fb = new Firebase("https://9523-2015.firebaseio.com/");
+        final Firebase fb = new Firebase("https://your-firebase-url.firebaseio.com/");
   
         this.robotValues = new RobotValues(fb, 1.5);
         this.robotValues
