@@ -53,7 +53,7 @@ public class FirebaseTest extends OpMode {
                             public void onValueChanged(Object val) {
                                 telemetry.addData("value1", "The value is: " + val);
                             }
-                        }))
+                        }));
  
  		// Start 
         this.robotValues.start();
