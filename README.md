@@ -5,7 +5,7 @@
 Gradle usage
 ==============
 
-Add a repository to your root build.gradle:
+Add a repository to your root build.gradle (The one called ftc-app):
 ```
 allprojects {
     repositories {
@@ -15,7 +15,7 @@ allprojects {
 }
 ```
 
-And add a dependency:
+And add a dependency to the bottom of the FtcRobotController build.gradle file:
 ```
 dependencies {
     ...
