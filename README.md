@@ -15,7 +15,18 @@ allprojects {
 }
 ```
 
-And add a dependency to the bottom of the FtcRobotController build.gradle file:
+Add a dependency and exclude duplicate files to the FtcRobotController build.gradle file:
+```
+android {
+    ...
+    packagingOptions {
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE-FIREBASE.txt'
+        exclude 'META-INF/NOTICE'
+    }
+}
+```
+(At the bottom of the file)
 ```
 dependencies {
     ...
