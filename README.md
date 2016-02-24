@@ -34,8 +34,9 @@ dependencies {
 }
 ```
 
-Code Example
+Code Example  
 ===============
+For more detail check out the FirebaseExample.java file
 
 ```java
 import org.athenian.ftc.ListenerAction;
