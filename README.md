@@ -60,7 +60,17 @@ public class FirebaseTest extends OpMode {
     @Override
     public void init() {
  
-        final Firebase fb = new Firebase("https://9523-2015.firebaseio.com/");
+    firebaseInit();
+    }
+ 
+    @Override
+    public void stop() {
+    	// Stop 
+        this.robotValues.stop();
+    }
+    
+    public void firebaseInit(){
+    final Firebase fb = new Firebase("https://9523-2015.firebaseio.com/");
 
         this.robotValues = new RobotValues(fb, 0.5);
         this.robotValues
@@ -143,12 +153,6 @@ public class FirebaseTest extends OpMode {
     
         // Start
         this.robotValues.start();
-    }
- 
-    @Override
-    public void stop() {
-    	// Stop 
-        this.robotValues.stop();
     }
  }
 ```
