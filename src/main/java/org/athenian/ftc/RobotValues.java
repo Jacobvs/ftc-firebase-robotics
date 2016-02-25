@@ -12,13 +12,13 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by Team9523 on 2/20/2016.
+ * Created by Team 9523 on 2/20/2016.
  */
 public class RobotValues {
   private final List<ValueWriter> valueList = new ArrayList<ValueWriter>();
-  private final long                        updateFreqMillis;
+  private final long updateFreqMillis;
   private final ScheduledThreadPoolExecutor executor;
-  private final Firebase                    firebaseRef;
+  private final Firebase firebaseRef;
 
   public RobotValues(final Firebase firebaseRef, double updateFreq) {
     this.updateFreqMillis = (long) (updateFreq * 1000);
@@ -32,16 +32,21 @@ public class RobotValues {
 
   public void start() {
     this.executor
-        .scheduleWithFixedDelay
-            (new Runnable() {
+        .scheduleWithFixedDelay(
+            new Runnable() {
               @Override
               public void run() {
                 for (ValueWriter value : valueList) {
                   Firebase fb = firebaseRef;
                   for (String val : value.getPath())
                     fb = fb.child(val);
-                  final Object obj = value.getValueSource().getValue();
-                  fb.setValue(obj);
+                  try {
+                    final Object obj = value.getValueSource().getValue();
+                    fb.setValue(obj);
+                  } catch (Throwable e) {
+                    fb.setValue(String.format("Exception thrown in getValue() %s [%s]",
+                        e.getClass().getSimpleName(), e.getMessage()));
+                  }
                 }
               }
             }, 1, this.updateFreqMillis, TimeUnit.MILLISECONDS);
