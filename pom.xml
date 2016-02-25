@@ -39,6 +39,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.5.1</version>
         <configuration>
           <optimize>true</optimize>
           <source>${maven.compiler.source}</source>
@@ -50,6 +51,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
+        <version>3.0.0</version>
         <executions>
           <execution>
             <id>attach-sources</id>
