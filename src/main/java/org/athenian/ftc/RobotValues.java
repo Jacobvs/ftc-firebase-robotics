@@ -16,9 +16,10 @@ import java.util.concurrent.TimeUnit;
  */
 public class RobotValues {
   private final List<ValueWriter> valueList = new ArrayList<ValueWriter>();
-  private final long updateFreqMillis;
+
+  private final long                        updateFreqMillis;
   private final ScheduledThreadPoolExecutor executor;
-  private final Firebase firebaseRef;
+  private final Firebase                    firebaseRef;
 
   public RobotValues(final Firebase firebaseRef, double updateFreq) {
     this.updateFreqMillis = (long) (updateFreq * 1000);
@@ -43,9 +44,10 @@ public class RobotValues {
                   try {
                     final Object obj = value.getValueSource().getValue();
                     fb.setValue(obj);
-                  } catch (Throwable e) {
+                  }
+                  catch (Throwable e) {
                     fb.setValue(String.format("Exception thrown in getValue() %s [%s]",
-                        e.getClass().getSimpleName(), e.getMessage()));
+                                              e.getClass().getSimpleName(), e.getMessage()));
                   }
                 }
               }
@@ -61,24 +63,36 @@ public class RobotValues {
     return this;
   }
 
-  public RobotValues add(final ValueListener valueListener) {
-    final List<String> pathVals = Splitter.on(".").splitToList(valueListener.getPath());
+  public RobotValues add(final ValueListener listener) {
+    final List<String> pathVals = Splitter.on(".")
+                                          .splitToList(listener.getPath());
+
     Firebase fb = this.firebaseRef;
     for (String val : pathVals)
       fb = fb.child(val);
+
+    // Write an empty node
     fb.setValue("");
 
     fb.addValueEventListener(
         new ValueEventListener() {
           @Override
-          public void onDataChange(final DataSnapshot dataSnapshot) {
-            valueListener.getListenerAction().onValueChanged(dataSnapshot.getValue());
+          public void onDataChange(final DataSnapshot snapshot) {
+            // Catch exceptions here to avoid blowing up the client app
+            try {
+              listener.getListenerAction()
+                      .onValueChanged(snapshot.getValue());
+            }
+            catch (Throwable e) {
+              // Ignore the exception
+            }
           }
 
           @Override
           public void onCancelled(final FirebaseError error) {
           }
         });
+
     return this;
   }
 
