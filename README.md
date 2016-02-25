@@ -59,26 +59,88 @@ public class FirebaseTest extends OpMode {
     @Override
     public void init() {
  
-        final Firebase fb = new Firebase("https://your-firebase-url.firebaseio.com/");
-  
-        this.robotValues = new RobotValues(fb, 1.5);
-        this.robotValues
-                .add(new ValueWriter("sensor.color.a",
-                        new ValueSource() {
-                            @Override
-                            public Object getValue() {
-                                return System.currentTimeMillis();
-                            }}))
-                .add(new ValueListener("sensor.color.a",
-                        new ListenerAction() {
-                            @Override
-                            public void onValueChanged(Object val) {
-                                telemetry.addData("value1", "The value is: " + val);
-                            }
-                        }));
- 
- 		// Start 
-        this.robotValues.start();
+        final Firebase fb = new Firebase("https://9523-2015.firebaseio.com/");
+
+    this.robotValues = new RobotValues(fb, 0.5);
+    this.robotValues
+        .add(new ValueWriter("motor.a",
+            new ValueSource() {
+              @Override
+              public Object getValue() {
+                return motor.getCurrentPosition();
+              }}))
+        .add(new ValueWriter("servo.a",
+            new ValueSource() {
+              @Override
+              public Object getValue() {
+                return servo.getPosition();
+              }
+            }))
+        .add(new ValueWriter("sensor.distance.a",
+            new ValueSource() {
+              @Override
+              public Object getValue() {
+                return distance.getLightDetected();
+              }}))
+        .add(new ValueWriter("sensor.gyro.a",
+            new ValueSource() {
+              @Override
+              public Object getValue() {
+                return String.format("The values are- Heading: %s, Rotation: %s, Raw x: %s, Raw y: %s, Raw z: %s",
+                    gyro.getHeading(), gyro.getRotation(), gyro.rawX(), gyro.rawY(), gyro.rawZ());
+              }}))
+        .add(new ValueWriter("sensor.color.a",
+            new ValueSource() {
+              @Override
+              public Object getValue() {
+                return String.format("The values are- ARGB: %s, Alpha: %s, Red: %s, Green: %s, Blue: %s",
+                    color.argb(), color.alpha(), color.red(), color.green(), color.blue());
+              }}))
+        .add(new ValueListener("motor.a",
+            new ListenerAction() {
+              @Override
+              public void onValueChanged(Object val) {
+                if (val != null) {
+                  if (val instanceof Long) {
+                    motor.setTargetPosition((Integer) val);
+                    motor.setPower(0.5);
+                  } else {
+                    telemetry.addData("IntegerException", val + " is not an Integer");
+                  }
+                } else {
+                  telemetry.addData("NullException", val + " is Null");
+                }
+              }
+            }))
+        .add(new ValueListener("servo.a",
+            new ListenerAction() {
+              @Override
+              public void onValueChanged(Object val) {
+                if (val != null) {
+                  if(val instanceof Long){
+                    long lVal =  (Long) val;
+                    if (lVal == 0 || lVal == 1 ){
+                      servo.setPosition(lVal);
+                    }
+                  }
+                  if(val instanceof Double){
+                    double dVal = (Double) val;
+                    if(dVal <= 0 && dVal >= 1){
+                      servo.setPosition(dVal);
+                    }
+
+                  } else {
+                    telemetry.addData("ValueException", val + " is not a Double or a Long");
+                  }
+                } else {
+                  telemetry.addData("NullException", val + " is Null");
+                }
+              }
+            }))
+    ;
+
+    // Start
+    this.robotValues.start();
     }
  
     @Override
