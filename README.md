@@ -103,6 +103,7 @@ public class FirebaseTest extends OpMode {
                   public void onValueChanged(Object val) {
                     if (val != null) {
                       if (val instanceof Long) {
+                        motor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
                         motor.setTargetPosition((Integer) val);
                         motor.setPower(0.5);
                       } else {
