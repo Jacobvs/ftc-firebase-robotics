@@ -9,9 +9,13 @@ Add a repository to your root build.gradle (The one called ftc-app):
 ```
 allprojects {
     repositories {
-        ...
-		maven { url "https://jitpack.io" }
-	}
+        jcenter()
+        flatDir {
+            dirs 'out'
+            mavenCentral()
+            maven { url "https://jitpack.io" }
+        }
+    }
 }
 ```
 
@@ -30,7 +34,7 @@ android {
 ```
 dependencies {
     ...
-    compile 'com.github.Jacobvs:ftc-firebase-robotics:1.1'
+    compile 'com.github.Jacobvs:ftc-firebase-robotics:1.0.1'
 }
 ```
 
