@@ -30,7 +30,7 @@ android {
 ```
 dependencies {
     ...
-    compile 'com.github.Jacobvs:ftc-firebase-robotics:1.0'
+    compile 'com.github.Jacobvs:ftc-firebase-robotics:1.1'
 }
 ```
 
