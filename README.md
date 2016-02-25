@@ -43,6 +43,7 @@ Code Example
 For more detail check out the FirebaseExample.java file
 
 ```java
+import com.firebase.client.Firebase;
 import org.athenian.ftc.ListenerAction;
 import org.athenian.ftc.RobotValues;
 import org.athenian.ftc.ValueListener;
