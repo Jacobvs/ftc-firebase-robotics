@@ -116,6 +116,9 @@ public class FirebaseTest extends OpMode {
                         motor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
                         motor.setTargetPosition((Integer) val);
                         motor.setPower(0.5);
+                        while(motor.isBusy()){
+                        }
+                        motor.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
                       } else {
                         telemetry.addData("IntegerException", val + " is not an Integer");
                       }
