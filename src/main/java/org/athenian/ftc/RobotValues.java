@@ -17,19 +17,17 @@ import java.util.concurrent.TimeUnit;
 public class RobotValues {
   private final List<ValueWriter> valueList = new ArrayList<ValueWriter>();
 
-  private final long                        updateFreqMillis;
-  private final ScheduledThreadPoolExecutor executor;
-  private final Firebase                    firebaseRef;
+  private final ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
 
-  public RobotValues(final Firebase firebaseRef, double updateFreq) {
-    this.updateFreqMillis = (long) (updateFreq * 1000);
-    this.executor = new ScheduledThreadPoolExecutor(1);
-    this.firebaseRef = firebaseRef;
+  private final Firebase firebase;
+  private final int      updateFreqSecs;
+
+  public RobotValues(final Firebase firebase, final int updateFreqSecs) {
+    this.firebase = firebase;
+    this.updateFreqSecs = updateFreqSecs;
   }
 
-  public double getUpdateFreq() {
-    return this.updateFreqMillis;
-  }
+  public double getUpdateFreqSecs() { return this.updateFreqSecs; }
 
   public void start() {
     this.executor
@@ -37,8 +35,8 @@ public class RobotValues {
             new Runnable() {
               @Override
               public void run() {
-                for (ValueWriter value : valueList) {
-                  Firebase fb = firebaseRef;
+                for (final ValueWriter value : valueList) {
+                  Firebase fb = firebase;
                   for (String val : value.getPath())
                     fb = fb.child(val);
                   try {
@@ -51,12 +49,10 @@ public class RobotValues {
                   }
                 }
               }
-            }, 1, this.updateFreqMillis, TimeUnit.MILLISECONDS);
+            }, 1, this.updateFreqSecs * 1000, TimeUnit.MILLISECONDS);
   }
 
-  public void stop() {
-    this.executor.shutdownNow();
-  }
+  public void stop() { this.executor.shutdownNow(); }
 
   public RobotValues add(final ValueWriter valueWriter) {
     this.valueList.add(valueWriter);
@@ -66,9 +62,8 @@ public class RobotValues {
   public RobotValues add(final ValueListener listener) {
     final List<String> pathVals = Splitter.on(".")
                                           .splitToList(listener.getPath());
-
-    Firebase fb = this.firebaseRef;
-    for (String val : pathVals)
+    Firebase fb = this.firebase;
+    for (final String val : pathVals)
       fb = fb.child(val);
 
     // Write an empty node
@@ -95,5 +90,4 @@ public class RobotValues {
 
     return this;
   }
-
 }
