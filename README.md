@@ -2,6 +2,8 @@
 
 [![Release](https://jitpack.io/v/Jacobvs/ftc-firebase-robotics.svg)](https://jitpack.io/#Jacobvs/ftc-firebase-robotics)
 
+Recieve real-time robotic telemetry data using Google Firebase pub/sub.
+
 Gradle usage
 ==============
 
